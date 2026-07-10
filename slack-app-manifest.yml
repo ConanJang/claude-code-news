@@ -1,0 +1,18 @@
+display_information:
+  name: Claude 소식
+  description: Claude Code 장애·토큰 리셋 소식을 구독 채널에 자동 게시합니다
+  background_color: "#CC785C"
+features:
+  bot_user:
+    display_name: Claude 소식
+    always_online: true
+oauth_config:
+  scopes:
+    bot:
+      - chat:write
+      - channels:read
+      - groups:read
+settings:
+  org_deploy_enabled: false
+  socket_mode_enabled: false
+  token_rotation_enabled: false

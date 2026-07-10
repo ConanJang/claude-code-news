@@ -1,0 +1,41 @@
+name: claude-news
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+    inputs:
+      test:
+        description: "테스트 메시지 전송"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: claude-news
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 수집·게시
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        run: |
+          if [ "${{ inputs.test }}" = "true" ]; then
+            python3 collect.py --test
+          else
+            python3 collect.py
+          fi
+
+      - name: 상태 커밋
+        run: |
+          git config user.name "claude-news-bot"
+          git config user.email "actions@github.com"
+          git add state/published.json
+          git diff --cached --quiet || git commit -m "state: $(date -u +%Y-%m-%dT%H:%M)" && git push
