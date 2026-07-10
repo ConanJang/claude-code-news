@@ -140,28 +140,11 @@ def slack_api(method, **params):
     return res
 
 
-def subscribed_channels():
-    """봇이 초대되어 있는 채널 목록 = 구독 채널."""
-    channels, cursor = [], ""
-    while True:
-        res = slack_api(
-            "users.conversations",
-            types="public_channel,private_channel",
-            limit=200,
-            cursor=cursor,
-        )
-        channels += [c["id"] for c in res.get("channels", [])]
-        cursor = res.get("response_metadata", {}).get("next_cursor", "")
-        if not cursor:
-            break
-    return channels
-
-
 def post_all(events):
-    channels = subscribed_channels()
+    """CHANNELS 환경변수에 명시된 채널에만 게시한다 (의도치 않은 채널 전파 방지)."""
+    channels = [c for c in os.environ.get("CHANNELS", "").split(",") if c.strip()]
     if not channels:
-        print("구독 채널 없음 — 봇을 채널에 /invite 하세요")
-        return
+        sys.exit("CHANNELS가 비어 있습니다 — 게시 대상 채널 ID를 명시하세요")
     for text in events:
         for ch in channels:
             slack_api("chat.postMessage", channel=ch, text=text, unfurl_links="false")

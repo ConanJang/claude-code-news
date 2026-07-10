@@ -26,6 +26,7 @@ jobs:
       - name: 수집·게시
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          CHANNELS: "C0AB32ZMK0C"  # 게시 대상 채널 (테스트)
         run: |
           if [ "${{ inputs.test }}" = "true" ]; then
             python3 collect.py --test
