@@ -1,0 +1,19 @@
+.github/workflows/news.yml
+  h_1c1d9501168061 1-41
+README.md
+  h_1c1d9501168061 1-25
+collect.py
+  h_1c1d9501168061 1-188
+slack-app-manifest.yml
+  h_1c1d9501168061 1-18
+---
+{
+  "schema_version": "zax-attestation/1.1.0",
+  "base_commit_sha": "81e0d5aff3cf8839c8cc61a0f36c2ce746c45ec5",
+  "prompts": {},
+  "humans": {
+    "h_1c1d9501168061": {
+      "author": "jihobada@naver.com"
+    }
+  }
+}
