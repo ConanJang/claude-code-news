@@ -141,18 +141,30 @@ def slack_api(method, **params):
 
 
 def post_all(events):
-    """CHANNELS 환경변수에 명시된 채널에만 게시한다 (의도치 않은 채널 전파 방지)."""
+    """게시 대상은 webhook URL(채널 고정) 우선, 없으면 CHANNELS에 명시된 채널만."""
+    webhooks = [u for u in os.environ.get("SLACK_WEBHOOK_URLS", "").split(",") if u.strip()]
+    if webhooks:
+        for text in events:
+            body = json.dumps({"text": text}).encode()
+            for url in webhooks:
+                req = urllib.request.Request(
+                    url, data=body, headers={"Content-Type": "application/json"}
+                )
+                with urllib.request.urlopen(req, timeout=20) as res:
+                    if res.read().decode() != "ok":
+                        print("webhook 게시 실패", file=sys.stderr)
+        return
     channels = [c for c in os.environ.get("CHANNELS", "").split(",") if c.strip()]
     if not channels:
-        sys.exit("CHANNELS가 비어 있습니다 — 게시 대상 채널 ID를 명시하세요")
+        sys.exit("SLACK_WEBHOOK_URLS와 CHANNELS가 모두 비어 있습니다")
     for text in events:
         for ch in channels:
             slack_api("chat.postMessage", channel=ch, text=text, unfurl_links="false")
 
 
 def main():
-    if not SLACK_TOKEN:
-        sys.exit("SLACK_BOT_TOKEN이 없습니다")
+    if not SLACK_TOKEN and not os.environ.get("SLACK_WEBHOOK_URLS"):
+        sys.exit("SLACK_WEBHOOK_URLS 또는 SLACK_BOT_TOKEN이 필요합니다")
     if "--test" in sys.argv:
         post_all([":wave: Claude 소식 봇 연결 테스트입니다. 이 채널은 구독 중입니다."])
         return

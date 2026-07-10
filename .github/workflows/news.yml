@@ -25,8 +25,10 @@ jobs:
 
       - name: 수집·게시
         env:
+          # webhook은 생성 시 지정한 채널(테스트: C0AB32ZMK0C)에만 게시 가능
+          SLACK_WEBHOOK_URLS: ${{ secrets.SLACK_WEBHOOK_URLS }}
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-          CHANNELS: "C0AB32ZMK0C"  # 게시 대상 채널 (테스트)
+          CHANNELS: "C0AB32ZMK0C"  # 토큰 모드일 때의 게시 대상
         run: |
           if [ "${{ inputs.test }}" = "true" ]; then
             python3 collect.py --test
