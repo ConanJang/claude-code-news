@@ -38,7 +38,8 @@ jobs:
 
       - name: 상태 커밋
         run: |
+          [ -f state/published.json ] || exit 0  # 테스트 모드는 state를 만들지 않는다
           git config user.name "claude-news-bot"
           git config user.email "actions@github.com"
           git add state/published.json
-          git diff --cached --quiet || git commit -m "state: $(date -u +%Y-%m-%dT%H:%M)" && git push
+          git diff --cached --quiet || { git commit -m "state: $(date -u +%Y-%m-%dT%H:%M)" && git push; }
