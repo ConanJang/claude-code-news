@@ -1,0 +1,13 @@
+.github/workflows/news.yml
+  h_1c1d9501168061 41,45
+---
+{
+  "schema_version": "zax-attestation/1.1.0",
+  "base_commit_sha": "7880f0f9daad8307c8e2969c1315631d92c43fc0",
+  "prompts": {},
+  "humans": {
+    "h_1c1d9501168061": {
+      "author": "jihobada@naver.com"
+    }
+  }
+}
