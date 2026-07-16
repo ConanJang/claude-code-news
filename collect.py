@@ -170,7 +170,9 @@ def main():
         return
     state = load_state()
     first_run = not state["incidents"] and not state["news"]
-    events = collect_incidents(state) + collect_reset_news(state)
+    # 리셋 감지는 로컬 statusLine 훅으로 이관(HN 경로는 ~2h 지연·부정확).
+    # collect_reset_news 함수는 복구 대비 남겨두되 호출하지 않는다. 장애만 Actions가 담당.
+    events = collect_incidents(state)
     save_state(state)
     if first_run:
         print(f"첫 실행: 기존 {len(events)}건은 기록만 하고 게시 생략")
