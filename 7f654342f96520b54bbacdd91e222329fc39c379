@@ -1,0 +1,13 @@
+collect.py
+  h_1c1d9501168061 173-175
+---
+{
+  "schema_version": "zax-attestation/1.2.0",
+  "base_commit_sha": "7f654342f96520b54bbacdd91e222329fc39c379",
+  "prompts": {},
+  "humans": {
+    "h_1c1d9501168061": {
+      "author": "jihobada@naver.com"
+    }
+  }
+}
